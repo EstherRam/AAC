@@ -1,22 +1,17 @@
-<!doctype html>
-<html>
-  <head>
-    <title>OpenVoice</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>OpenVoice</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
 
-    
+<body>
+  <div class="app">
 
-  <!-- Header -->
     <header class="top-bar">
       <h1>OpenVoice</h1>
-      <div class="toggles">
-        <button aria-label="Dark mode">🌙</button>
-      </div>
     </header>
 
-    <!-- Navigation -->
     <nav class="tabs">
       <button class="tab active">Sentence building</button>
       <button class="tab">I am feeling</button>
@@ -25,76 +20,19 @@
       <button class="tab help">Help</button>
     </nav>
 
-    <!-- Sentence Builder -->
     <section class="sentence-bar">
-      <input type="text" placeholder="I want to…" aria-label="Sentence output" />
-      <button class="speak">🔊</button>
-      <button class="clear">🗑</button>
+      <input type="text" placeholder="I want to…" />
+      <button>🔊</button>
+      <button>🗑</button>
     </section>
 
-    <!-- Content -->
     <main class="content">
+      <!-- all your sections -->
+    </main>
 
-      <!-- SUBJECT -->
-      <section>
-        <h2>Subject</h2>
-        <div class="grid blue">
-          <button class="tile">I</button>
-          <button class="tile">You</button>
-          <button class="tile">We</button>
-          <button class="tile">They</button>
-          <button class="tile">She</button>
-          <button class="tile add">＋ Add More</button>
-        </div>
-      </section>
+  </div>
 
-      <!-- THINGS -->
-      <section>
-        <h2>Things</h2>
-        <div class="grid purple">
-          <button class="tile">Want</button>
-          <button class="tile">Need</button>
-          <button class="tile">Like</button>
-          <button class="tile">Have</button>
-          <button class="tile">See</button>
-          <button class="tile">Go</button>
-          <button class="tile">Eat</button>
-          <button class="tile">Drink</button>
-          <button class="tile">Play</button>
-          <button class="tile add">＋ Add More</button>
-        </div>
-      </section>
-
-      <!-- ACTIONS -->
-      <section>
-        <h2>Actions</h2>
-        <div class="grid green">
-          <button class="tile">Water</button>
-          <button class="tile">Food</button>
-          <button class="tile">Help</button>
-          <button class="tile">Break</button>
-          <button class="tile">Bathroom</button>
-          <button class="tile">Sleep</button>
-          <button class="tile">Music</button>
-          <button class="tile">Stop</button>
-          <button class="tile add">＋ Add More</button>
-        </div>
-      </section>
-
-      <!-- OTHER WORDS -->
-      <section>
-        <h2>Other Words</h2>
-        <div class="grid orange">
-          <button class="tile">Now</button>
-          <button class="tile">Later</button>
-          <button class="tile">Yes</button>
-          <button class="tile add">＋ Add More</button>
-        </div>
-      </section>
-
-    
-
-      <script src="main.js"></script>
-    
-  </body>
+  <script src="main.js"></script>
+</body>
 </html>
+
