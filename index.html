@@ -3,25 +3,21 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!--
-    Viewport meta tag based on MDN guidance
-    Source: https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag
-  -->
+  <!-- Viewport meta tag (MDN) -->
+  <!-- Source: https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>OpenVoice – AAC Prototype</title>
 
   <style>
-    /* Start of code from MDN CSS Reset / Box Model
+    /* Start of code from MDN CSS box-sizing
        Source: https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
     * {
       box-sizing: border-box;
       font-family: system-ui, sans-serif;
     }
-    /* End of code from MDN CSS Reset / Box Model */
+    /* End of code from MDN CSS box-sizing */
 
-    /* Start of code adapted from MDN Flexbox Layout
-       Source: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout */
     body {
       margin: 0;
       background: #121827;
@@ -29,10 +25,8 @@
       display: flex;
       justify-content: center;
     }
-    /* End of code adapted from MDN Flexbox Layout */
 
-    /* App container sized to iPad Pro 11" (834px portrait)
-       Source: https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design */
+    /* App container sized to iPad Pro 11" portrait (834px wide) */
     .app {
       width: 100%;
       max-width: 834px;
@@ -55,8 +49,6 @@
     }
 
     /* ---------- TABS ---------- */
-    /* Start of code from MDN Flexbox
-       Source: https://developer.mozilla.org/en-US/docs/Web/CSS/flex */
     .tabs {
       display: flex;
       gap: 8px;
@@ -73,7 +65,6 @@
       font-size: 12px;
       cursor: pointer;
     }
-    /* End of code from MDN Flexbox */
 
     .tabs button.active {
       background: #3f61ff;
@@ -107,7 +98,7 @@
     /* ---------- SECTIONS ---------- */
     h2 {
       font-size: 14px;
-      opacity: 0.8;
+      opacity: 0.85;
       margin: 16px 0 8px;
     }
 
@@ -122,13 +113,13 @@
     /* End of code from MDN CSS Grid Layout */
 
     /* ---------- BUTTONS ---------- */
-    /* Fallback: ensures buttons never disappear even if a color class is missing */
+    /* Fallback background so buttons never disappear */
     button {
       background: #3a4252;
       color: white;
     }
 
-    /* Start of code from MDN clamp() responsive sizing
+    /* Start of code from MDN clamp()
        Source: https://developer.mozilla.org/en-US/docs/Web/CSS/clamp */
     .tile {
       padding: clamp(16px, 4vw, 28px);
@@ -136,25 +127,52 @@
       border: none;
       font-size: clamp(14px, 2.5vw, 18px);
       cursor: pointer;
-    }
-    /* End of code from MDN clamp() responsive sizing */
 
+      /* Icon + label layout */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+    }
+    /* End of code from MDN clamp() */
+
+    .tile img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      display: block;
+    }
+
+    @media (min-width: 600px) {
+      .tile img {
+        width: 48px;
+        height: 48px;
+      }
+    }
+
+    .tile span {
+      display: block;
+      line-height: 1.1;
+    }
+
+    /* ---------- COLORS ---------- */
     .tile.blue { background: #3f61ff; }
     .tile.purple { background: #7c3aed; }
     .tile.green { background: #3fb3a2; }
     .tile.orange { background: #d96b2b; }
     .tile.grey { background: #3a4252; }
 
-    /* Start of code from MDN :focus-visible
-       Source: https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible */
+    /* ---------- ACCESSIBILITY ---------- */
+    /* Source: https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible */
     button:focus-visible,
     input:focus-visible {
       outline: 3px solid white;
       outline-offset: 2px;
     }
-    /* End of code from MDN :focus-visible */
 
-    /* ---------- RESPONSIVE ---------- */
+    /* ---------- RESPONSIVE TABS ---------- */
     @media (max-width: 480px) {
       .tabs button {
         font-size: 10px;
@@ -167,11 +185,13 @@
 <body>
   <div class="app">
 
+    <!-- HEADER -->
     <div class="top-bar">
       <h1>OpenVoice</h1>
     </div>
 
-    <div class="tabs">
+    <!-- TABS (visual only for now) -->
+    <div class="tabs" aria-label="Navigation tabs">
       <button type="button" class="active">Sentence</button>
       <button type="button">Feeling</button>
       <button type="button">Want</button>
@@ -179,55 +199,60 @@
       <button type="button">Help</button>
     </div>
 
+    <!-- SENTENCE BUILDER -->
     <div class="sentence-bar">
       <input id="sentence" placeholder="I want to…" aria-label="Sentence output" />
       <button type="button" id="speakBtn" aria-label="Speak sentence">🔊</button>
       <button type="button" id="clearBtn" aria-label="Clear sentence">🗑</button>
     </div>
 
+    <!-- SUBJECT -->
     <h2>Subject</h2>
     <div class="grid">
-      <button type="button" class="tile blue word" data-word="I">I</button>
-      <button type="button" class="tile blue word" data-word="You">You</button>
-      <button type="button" class="tile blue word" data-word="We">We</button>
-      <button type="button" class="tile blue word" data-word="They">They</button>
-      <button type="button" class="tile blue word" data-word="She">She</button>
-      <button type="button" class="tile grey">＋ Add</button>
+      <button type="button" class="tile blue word" data-word="I"><span>I</span></button>
+      <button type="button" class="tile blue word" data-word="You"><span>You</span></button>
+      <button type="button" class="tile blue word" data-word="We"><span>We</span></button>
+      <button type="button" class="tile blue word" data-word="They"><span>They</span></button>
+      <button type="button" class="tile blue word" data-word="She"><span>She</span></button>
+      <button type="button" class="tile grey"><span>＋ Add</span></button>
     </div>
 
+    <!-- THINGS -->
     <h2>Things</h2>
     <div class="grid">
-      <button type="button" class="tile purple word" data-word="Want">Want</button>
-      <button type="button" class="tile purple word" data-word="Need">Need</button>
-      <button type="button" class="tile purple word" data-word="Like">Like</button>
-      <button type="button" class="tile purple word" data-word="Have">Have</button>
-      <button type="button" class="tile purple word" data-word="See">See</button>
-      <button type="button" class="tile purple word" data-word="Go">Go</button>
-      <button type="button" class="tile purple word" data-word="Eat">Eat</button>
-      <button type="button" class="tile purple word" data-word="Drink">Drink</button>
-      <button type="button" class="tile purple word" data-word="Play">Play</button>
-      <button type="button" class="tile grey">＋ Add</button>
+      <button type="button" class="tile purple word" data-word="Want"><span>Want</span></button>
+      <button type="button" class="tile purple word" data-word="Need"><span>Need</span></button>
+      <button type="button" class="tile purple word" data-word="Like"><span>Like</span></button>
+      <button type="button" class="tile purple word" data-word="Have"><span>Have</span></button>
+      <button type="button" class="tile purple word" data-word="See"><span>See</span></button>
+      <button type="button" class="tile purple word" data-word="Go"><span>Go</span></button>
+      <button type="button" class="tile purple word" data-word="Eat"><span>Eat</span></button>
+      <button type="button" class="tile purple word" data-word="Drink"><span>Drink</span></button>
+      <button type="button" class="tile purple word" data-word="Play"><span>Play</span></button>
+      <button type="button" class="tile grey"><span>＋ Add</span></button>
     </div>
 
+    <!-- ACTIONS -->
     <h2>Actions</h2>
     <div class="grid">
-      <button type="button" class="tile green word" data-word="Water">Water</button>
-      <button type="button" class="tile green word" data-word="Food">Food</button>
-      <button type="button" class="tile green word" data-word="Help">Help</button>
-      <button type="button" class="tile green word" data-word="Break">Break</button>
-      <button type="button" class="tile green word" data-word="Bathroom">Bathroom</button>
-      <button type="button" class="tile green word" data-word="Sleep">Sleep</button>
-      <button type="button" class="tile green word" data-word="Music">Music</button>
-      <button type="button" class="tile green word" data-word="Stop">Stop</button>
-      <button type="button" class="tile grey">＋ Add</button>
+      <button type="button" class="tile green word" data-word="Water"><span>Water</span></button>
+      <button type="button" class="tile green word" data-word="Food"><span>Food</span></button>
+      <button type="button" class="tile green word" data-word="Help"><span>Help</span></button>
+      <button type="button" class="tile green word" data-word="Break"><span>Break</span></button>
+      <button type="button" class="tile green word" data-word="Bathroom"><span>Bathroom</span></button>
+      <button type="button" class="tile green word" data-word="Sleep"><span>Sleep</span></button>
+      <button type="button" class="tile green word" data-word="Music"><span>Music</span></button>
+      <button type="button" class="tile green word" data-word="Stop"><span>Stop</span></button>
+      <button type="button" class="tile grey"><span>＋ Add</span></button>
     </div>
 
+    <!-- OTHER WORDS -->
     <h2>Other Words</h2>
     <div class="grid">
-      <button type="button" class="tile orange word" data-word="Now">Now</button>
-      <button type="button" class="tile orange word" data-word="Later">Later</button>
-      <button type="button" class="tile orange word" data-word="Yes">Yes</button>
-      <button type="button" class="tile grey">＋ Add</button>
+      <button type="button" class="tile orange word" data-word="Now"><span>Now</span></button>
+      <button type="button" class="tile orange word" data-word="Later"><span>Later</span></button>
+      <button type="button" class="tile orange word" data-word="Yes"><span>Yes</span></button>
+      <button type="button" class="tile grey"><span>＋ Add</span></button>
     </div>
 
   </div>
@@ -235,26 +260,40 @@
   <!-- Start of code from MDN Web Speech API
        Source: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API -->
   <script>
-    console.log("Web Speech API loaded");
-
     const input = document.getElementById("sentence");
 
+    // Add icons + click behavior for each word button
     document.querySelectorAll(".word").forEach((btn) => {
+      const word = btn.dataset.word;
+
+      // Create icon element
+      const img = document.createElement("img");
+      img.src = `images/${word}.png`;
+      img.alt = `${word} icon`;
+
+      // If icon missing, remove it (button still works)
+      img.onerror = () => img.remove();
+
+      // Place icon above the label
+      btn.prepend(img);
+
+      // Click adds the word to the sentence bar
       btn.addEventListener("click", () => {
-        const word = btn.dataset.word;
         input.value += (input.value ? " " : "") + word;
       });
     });
 
+    // Clear sentence
     document.getElementById("clearBtn").addEventListener("click", () => {
       input.value = "";
     });
 
+    // Speak sentence
     document.getElementById("speakBtn").addEventListener("click", () => {
       const text = input.value.trim();
       if (!text) return;
 
-      // Prevent overlapping speech if the user presses speak multiple times
+      // Prevent overlapping speech
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
