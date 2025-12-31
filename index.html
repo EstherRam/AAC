@@ -2,12 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+
+  <!-- Start of code from MDN: Viewport meta tag
+       Source: https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- End of code from MDN: Viewport meta tag -->
+
   <title>OpenVoice – Onboarding</title>
 
   <style>
-    * { box-sizing: border-box; font-family: system-ui, sans-serif; }
+    /* Start of code from MDN: box-sizing
+       Source: https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, sans-serif;
+    }
+    /* End of code from MDN: box-sizing */
 
+    /* Start of code adapted from MDN: Flexbox basics (centering layout)
+       Source: https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox */
     body {
       margin: 0;
       background: #121827;
@@ -15,7 +28,10 @@
       display: flex;
       justify-content: center;
     }
+    /* End of code adapted from MDN: Flexbox basics */
 
+    /* Start of code adapted from MDN: Responsive design fundamentals
+       Source: https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design */
     .app {
       width: 100%;
       max-width: 834px; /* iPad Pro 11" portrait width */
@@ -25,6 +41,7 @@
       flex-direction: column;
       gap: 14px;
     }
+    /* End of code adapted from MDN: Responsive design fundamentals */
 
     /* Header to match app */
     .top-bar {
@@ -62,6 +79,8 @@
     }
     .step.active { display: block; }
 
+    /* Start of code from MDN: clamp()
+       Source: https://developer.mozilla.org/en-US/docs/Web/CSS/clamp */
     .title {
       font-size: clamp(22px, 2.6vw, 30px);
       margin: 10px 0 8px;
@@ -75,6 +94,7 @@
       opacity: 0.9;
       line-height: 1.35;
     }
+    /* End of code from MDN: clamp() */
 
     /* Visual area */
     .visual {
@@ -148,10 +168,13 @@
       padding: 14px 10px;
     }
 
+    /* Start of code from MDN: :focus-visible
+       Source: https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible */
     button:focus-visible {
       outline: 3px solid #fff;
       outline-offset: 3px;
     }
+    /* End of code from MDN: :focus-visible */
 
     /* Mobile tweaks */
     @media (max-width: 480px) {
@@ -166,43 +189,42 @@
   <div class="app">
     <!-- Header SVG -->
     <header class="top-bar">
-      <img src="images/Header.svg" alt="OpenVoice" class="header-logo"
-           onerror="this.remove();" />
+      <!-- Start of code adapted from MDN: <img> element + onerror handler
+           Source: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img -->
+      <img
+        src="images/Header.svg"
+        alt="OpenVoice"
+        class="header-logo"
+        onerror="this.remove();"
+      />
+      <!-- End of code adapted from MDN: <img> element + onerror handler -->
     </header>
 
     <div class="card">
       <!-- STEP 1 -->
       <section class="step active" data-step="1" data-img="images/onboarding/step1.png">
-        <div class="visual">
-          <img alt="" />
-        </div>
+        <div class="visual"><img alt="" /></div>
         <h1 class="title">Welcome to OpenVoice</h1>
         <p class="desc">OpenVoice helps you communicate quickly using big, clear buttons.</p>
       </section>
 
       <!-- STEP 2 -->
       <section class="step" data-step="2" data-img="images/onboarding/step2.png">
-        <div class="visual">
-          <img alt="" />
-        </div>
+        <div class="visual"><img alt="" /></div>
         <h1 class="title">Tap to express needs</h1>
         <p class="desc">Use “I want” to quickly ask for things like water, food, or a break.</p>
       </section>
 
       <!-- STEP 3 -->
       <section class="step" data-step="3" data-img="images/onboarding/step3.png">
-        <div class="visual">
-          <img alt="" />
-        </div>
+        <div class="visual"><img alt="" /></div>
         <h1 class="title">Feelings are fast too</h1>
         <p class="desc">Use “I am feeling” to share emotions like happy, sad, mad, or confused.</p>
       </section>
 
       <!-- STEP 4 -->
       <section class="step" data-step="4" data-img="images/onboarding/step4.png">
-        <div class="visual">
-          <img alt="" />
-        </div>
+        <div class="visual"><img alt="" /></div>
         <h1 class="title">Emergency is always available</h1>
         <p class="desc">Emergency actions stay easy to reach and are designed for quick access.</p>
       </section>
@@ -225,7 +247,11 @@
   </div>
 
   <script>
-    const MAIN_APP_PAGE = "core.html"; 
+    // Start of code adapted from MDN: location navigation + localStorage
+    // Source (location): https://developer.mozilla.org/en-US/docs/Web/API/Location
+    // Source (localStorage): https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+
+    const MAIN_APP_PAGE = "core.html";
 
     let current = 1;
     const steps = Array.from(document.querySelectorAll(".step"));
@@ -247,7 +273,7 @@
       imgEl.src = src;
 
       imgEl.onerror = () => {
-        // If you haven't added visuals yet, hide the visual area cleanly
+        // If visuals aren't present yet, hide the visual area cleanly
         visual.style.display = "none";
       };
     }
@@ -258,9 +284,8 @@
 
       const stepEl = steps[n - 1];
       stepEl.classList.add("active");
-      dots[n - 1]?.classList.add("active");
+      if (dots[n - 1]) dots[n - 1].classList.add("active");
 
-      // Load (or hide) the image for that step
       // Re-show visual in case previous step hid it
       const visual = stepEl.querySelector(".visual");
       visual.style.display = "";
@@ -272,7 +297,6 @@
     }
 
     function finishOnboarding() {
-      // Optional: remember completion
       localStorage.setItem("openvoice_onboarded", "true");
       window.location.href = MAIN_APP_PAGE;
     }
@@ -295,8 +319,9 @@
 
     skipBtn.addEventListener("click", () => finishOnboarding());
 
-    // Init
     showStep(current);
+
+    // End of code adapted from MDN: location navigation + localStorage
   </script>
 </body>
 </html>
