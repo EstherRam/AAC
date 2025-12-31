@@ -133,16 +133,20 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 12px;
       text-align: center;
     }
     /* End of code from MDN clamp() */
 
-    .tile img {
-      width: 50px;
-      height: 50px;
+    /* SVG icon sizing (bigger + responsive) */
+    .tile img.icon {
+      width: clamp(64px, 8vw, 96px);
+      height: clamp(64px, 8vw, 96px);
       object-fit: contain;
       display: block;
+
+      /* Makes black SVG exports appear white (common for outline icons) */
+      filter: brightness(0) invert(1);
     }
 
     .tile span {
@@ -259,9 +263,10 @@
     document.querySelectorAll(".word").forEach((btn) => {
       const word = btn.dataset.word;
 
-      // Create icon element
+      // Create icon element (SVG files now)
       const img = document.createElement("img");
-      img.src = `images/${word}.png`;
+      img.className = "icon";
+      img.src = `images/${word}.svg`;
       img.alt = `${word} icon`;
 
       // If icon missing, remove it (button still works)
