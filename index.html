@@ -8,208 +8,203 @@
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
 
-    body {
-      margin: 0;
-      background: #121827;
-      color: #fff;
-      display: flex;
-      justify-content: center;
+    body{
+      margin:0;
+      background:#0f1623;
+      color:#fff;
+      display:flex;
+      justify-content:center;
     }
 
-    .app {
-      width: 100%;
-      max-width: 834px; /* iPad Pro 11" portrait */
-      min-height: 100vh;
-      padding: 16px;
+    .app{
+      width:100%;
+      max-width:834px; /* iPad Pro 11" portrait */
+      min-height:100vh;
+      padding:14px;
     }
 
-    /* HEADER */
-    .top-bar {
-      background: #2a3246;
-      padding: 18px 16px;
-      text-align: center;
-      border-radius: 14px;
-      margin-bottom: 14px;
-      position: relative;
+    /* HEADER (matches your style) */
+    .top-bar{
+      background:#2a3246;
+      border-radius:14px;
+      padding:22px 16px;
+      text-align:center;
+      position:relative;
+      margin-bottom:14px;
     }
-    .top-bar h1 {
-      margin: 0;
-      font-size: 44px;
-      letter-spacing: .5px;
-      font-weight: 700;
+    .top-bar h1{
+      margin:0;
+      font-size:54px;
+      font-weight:700;
+      letter-spacing:.5px;
+    }
+    .toggle{
+      position:absolute;
+      right:14px;
+      top:14px;
+      display:flex;
+      gap:10px;
+    }
+    .toggle button{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      cursor:pointer;
     }
 
     /* TABS BAR */
-    .tabs {
-      display: flex;
-      gap: 10px;
-      background: #8a93a7;
-      padding: 10px;
-      border-radius: 14px;
-      margin-bottom: 18px;
-      align-items: center;
+    .tabs-bar{
+      background:#8792a8;
+      border-radius:14px;
+      padding:10px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom:18px;
     }
-
-    .tab {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: none;
-      background: #3a4252;
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-      white-space: nowrap;
-      flex: 0 0 auto;
+    .tab{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:12px;
+      border:none;
+      background:#3a4252;
+      color:#fff;
+      font-size:15px;
+      cursor:pointer;
+      white-space:nowrap;
     }
+    .tab[aria-selected="true"][data-target="sentence"]{ background:#3f61ff; }
+    .tab[aria-selected="true"][data-target="feeling"] { background:#c63d7a; }
+    .tab[aria-selected="true"][data-target="want"]    { background:#7c3aed; }
+    .tab[aria-selected="true"][data-target="emergency"]{ background:#e2553f; }
+    .tab[aria-selected="true"][data-target="help"]    { background:#3a4252; }
 
-    .tab .tab-ico {
-      width: 18px;
-      height: 18px;
-      filter: brightness(0) invert(1);
-      opacity: .95;
-    }
-
-    .tabs .spacer { flex: 1; }
-
-    /* Active tab colors (match screenshots) */
-    .tab[aria-selected="true"][data-target="sentence"] { background: #3f61ff; }
-    .tab[aria-selected="true"][data-target="feeling"]  { background: #c63d7a; }
-    .tab[aria-selected="true"][data-target="want"]     { background: #7c3aed; }
-    .tab[aria-selected="true"][data-target="emergency"]{ background: #e2553f; }
-    .tab[aria-selected="true"][data-target="help"]     { background: #3a4252; }
+    .tabs-bar .spacer{ flex:1; }
 
     /* SCREENS */
-    .screen[hidden] { display: none; }
+    .screen[hidden]{ display:none; }
 
-    /* GRID TILES (general) */
-    .grid {
-      display: grid;
+    /* WANT GRID */
+    .grid{
+      display:grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 14px;
+      gap:14px;
+      padding-top:8px;
+    }
+    @media (max-width: 740px){ .grid{ grid-template-columns: repeat(4, 1fr);} }
+    @media (max-width: 560px){ .grid{ grid-template-columns: repeat(3, 1fr);} }
+
+    .tile{
+      border:none;
+      border-radius:14px;
+      min-height:128px;
+      padding:18px 14px;
+      cursor:pointer;
+      color:#fff;
+
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+
+      box-shadow:0 10px 20px rgba(0,0,0,.35);
     }
 
-    @media (max-width: 740px) {
-      .grid { grid-template-columns: repeat(4, 1fr); }
-    }
-    @media (max-width: 560px) {
-      .grid { grid-template-columns: repeat(3, 1fr); }
-    }
+    .tile.purple{ background:#7c3aed; }
+    .tile.grey{ background:#3a4252; }
 
-    .tile {
-      border: none;
-      border-radius: 14px;
-      padding: 18px 14px;
-      color: #fff;
-      cursor: pointer;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-
-      box-shadow: 0 10px 20px rgba(0,0,0,.35);
-      min-height: 120px;
-    }
-
-    .tile .icon {
-      width: clamp(56px, 7vw, 86px);
-      height: clamp(56px, 7vw, 86px);
-      object-fit: contain;
-      display: block;
+    .tile img.icon{
+      width: clamp(62px, 7vw, 92px);
+      height: clamp(62px, 7vw, 92px);
+      object-fit:contain;
+      display:block;
+      /* makes dark SVG exports show as white (safe for most outline sets) */
       filter: brightness(0) invert(1);
     }
 
-    .tile .label {
-      font-size: 18px;
-      font-weight: 500;
+    .tile .label{
+      font-size:20px;
+      font-weight:500;
+      line-height:1.1;
+      text-align:center;
     }
 
-    /* TILE COLORS */
-    .purple { background: #7c3aed; }
-    .grey   { background: #3a4252; }
-    .red    { background: #e2553f; }
-
-    /* “Add More” tile */
-    .tile.add .label { font-size: 20px; }
-    .tile.add .icon  { width: 70px; height: 70px; opacity: .95; }
-
-    /* EMERGENCY LAYOUT */
-    .emergency-row {
-      display: grid;
+    /* EMERGENCY */
+    .emergency-row{
+      display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 22px;
-      padding-top: 30px;
+      gap:22px;
+      padding-top:40px;
+    }
+    @media (max-width: 640px){
+      .emergency-row{ grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 640px) {
-      .emergency-row { grid-template-columns: 1fr; }
+    .em-card{
+      border:none;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 18px 28px rgba(0,0,0,.35);
+      cursor:pointer;
+      min-height:330px;
     }
 
-    .em-card {
-      border: none;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 18px 28px rgba(0,0,0,.35);
-      cursor: pointer;
-      background: #e2553f;
-      min-height: 320px;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: stretch;
+    .em-911{
+      background:#e2553f;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      padding:28px;
     }
-
-    /* 911 card */
-    .em-card.big-icon {
-      align-items: center;
-      justify-content: center;
-      padding: 30px;
-      gap: 12px;
-    }
-    .em-card.big-icon img {
-      width: 110px;
-      height: 110px;
+    .em-911 img{
+      width:120px;
+      height:120px;
+      object-fit:contain;
+      display:block;
       filter: brightness(0) invert(1);
     }
-    .em-card.big-icon .num {
-      font-size: 84px;
-      font-weight: 700;
-      line-height: 1;
-      text-align: center;
+    .em-911 .num{
+      font-size:92px;
+      font-weight:800;
+      line-height:1;
     }
 
-    /* Call Mom card */
-    .em-card.photo {
-      background: #111827;
+    .em-mom{
+      background:#111827;
+      display:flex;
+      flex-direction:column;
     }
-    .em-card.photo .photo-area {
-      flex: 1;
-      background: #111827;
+    .em-mom .photo{
+      flex:1;
+      background:#111827;
     }
-    .em-card.photo .photo-area img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    .em-mom .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
-    .em-card.photo .label-area {
-      background: #e2553f;
-      padding: 22px 18px;
-      font-size: 46px;
-      font-weight: 600;
-      text-align: center;
+    .em-mom .bar{
+      background:#e2553f;
+      padding:22px 16px;
+      text-align:center;
+      font-size:52px;
+      font-weight:500;
     }
-    .em-card.photo .label-area span { font-weight: 800; }
+    .em-mom .bar b{ font-weight:900; }
 
-    /* Focus */
-    button:focus-visible {
-      outline: 3px solid #fff;
-      outline-offset: 3px;
+    /* Accessibility */
+    button:focus-visible{
+      outline:3px solid #fff;
+      outline-offset:3px;
     }
   </style>
 </head>
@@ -218,50 +213,49 @@
   <div class="app">
     <header class="top-bar">
       <h1>OpenVoice</h1>
+      <div class="toggle" aria-hidden="true">
+        <button type="button">🌙</button>
+        <button type="button">☀️</button>
+      </div>
     </header>
 
-    <!-- Tabs -->
-    <nav class="tabs" role="tablist" aria-label="Primary navigation">
+    <nav class="tabs-bar" role="tablist" aria-label="Primary navigation">
       <button class="tab" role="tab" aria-selected="true" data-target="sentence" type="button">
-        <img class="tab-ico" src="images/Sentence.svg" alt="" />
         Sentence building
       </button>
-
       <button class="tab" role="tab" aria-selected="false" data-target="feeling" type="button">
-        <img class="tab-ico" src="images/Feeling.svg" alt="" />
         I am feeling
       </button>
-
       <button class="tab" role="tab" aria-selected="false" data-target="want" type="button">
-        <img class="tab-ico" src="images/Want.svg" alt="" />
         I want
       </button>
-
       <button class="tab" role="tab" aria-selected="false" data-target="emergency" type="button">
-        <img class="tab-ico" src="images/Emergency.svg" alt="" />
         Emergency
       </button>
 
       <div class="spacer"></div>
 
       <button class="tab" role="tab" aria-selected="false" data-target="help" type="button">
-        <img class="tab-ico" src="images/HelpTab.svg" alt="" />
         Help
       </button>
     </nav>
 
     <main>
-      <!-- SCREEN: Sentence building (placeholder – keep your sentence builder here) -->
+      <!-- You can paste your Sentence-building screen here -->
       <section class="screen" data-screen="sentence">
-        <p style="opacity:.8; margin: 18px 6px;">Sentence building screen (keep your sentence bar + grids here).</p>
+        <div style="opacity:.8; padding:10px 6px;">
+          Sentence building screen content goes here.
+        </div>
       </section>
 
-      <!-- SCREEN: Feeling (placeholder) -->
+      <!-- You can paste your Feeling grid here -->
       <section class="screen" data-screen="feeling" hidden>
-        <p style="opacity:.8; margin: 18px 6px;">Feeling screen (you can paste your pink tiles here).</p>
+        <div style="opacity:.8; padding:10px 6px;">
+          Feeling screen content goes here.
+        </div>
       </section>
 
-      <!-- SCREEN: I want (matches your screenshot layout) -->
+      <!-- WANT (matches your screenshot) -->
       <section class="screen" data-screen="want" hidden>
         <div class="grid">
           <button type="button" class="tile purple word" data-word="Bathroom"><span class="label">Bathroom</span></button>
@@ -281,36 +275,34 @@
           <button type="button" class="tile purple word" data-word="Music"><span class="label">Music</span></button>
 
           <button type="button" class="tile grey add">
-            <img class="icon" src="images/Plus.svg" alt="" />
             <span class="label">Add More</span>
           </button>
         </div>
       </section>
 
-      <!-- SCREEN: Emergency (matches your screenshot layout) -->
+      <!-- EMERGENCY (matches your screenshot) -->
       <section class="screen" data-screen="emergency" hidden>
         <div class="emergency-row">
-          <!-- 911 -->
-          <button type="button" class="em-card big-icon" aria-label="Call 911">
-            <!-- If your 911 icon svg is named differently, change this -->
+          <button type="button" class="em-card em-911" aria-label="Call 911">
+            <!-- expects images/911.svg -->
             <img src="images/911.svg" alt="" />
             <div class="num">911</div>
           </button>
 
-          <!-- Call Mom -->
-          <button type="button" class="em-card photo" aria-label="Call Mom">
-            <div class="photo-area">
-              <!-- Put an image named mom.jpg in /images or change the filename here -->
-              <img src="images/mom.jpg" alt="Contact photo" />
+          <button type="button" class="em-card em-mom" aria-label="Call Mom">
+            <div class="photo">
+              <!-- change this filename to whatever you actually have -->
+              <img src="images/Call Mom.jpg" alt="Contact photo" onerror="this.style.display='none'" />
             </div>
-            <div class="label-area">Call <span>Mom</span></div>
+            <div class="bar">Call <b>Mom</b></div>
           </button>
         </div>
       </section>
 
-      <!-- SCREEN: Help (placeholder) -->
       <section class="screen" data-screen="help" hidden>
-        <p style="opacity:.8; margin: 18px 6px;">Help screen content goes here.</p>
+        <div style="opacity:.8; padding:10px 6px;">
+          Help screen content goes here.
+        </div>
       </section>
     </main>
   </div>
@@ -324,21 +316,24 @@
       screens.forEach(s => s.hidden = (s.dataset.screen !== name));
       tabs.forEach(t => t.setAttribute("aria-selected", String(t.dataset.target === name)));
     }
-
     tabs.forEach(tab => tab.addEventListener("click", () => showScreen(tab.dataset.target)));
 
-    // Auto-load SVG icons for "word" tiles (expects images/<word>.svg)
+    // Auto-load SVG icons for tiles based on their title (handles spaces!)
     document.querySelectorAll(".word").forEach((btn) => {
       const word = btn.dataset.word;
 
       const img = document.createElement("img");
       img.className = "icon";
-      img.src = `images/${word}.svg`;
+
+      // IMPORTANT: spaces/special chars need URL encoding for GitHub Pages
+      const safeName = encodeURIComponent(word);
+      img.src = `images/${safeName}.svg`;
+
       img.alt = "";
 
       img.onerror = () => img.remove();
 
-      // Insert icon at top of tile (before label)
+      // Insert icon above label
       btn.prepend(img);
     });
   </script>
