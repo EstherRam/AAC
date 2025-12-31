@@ -23,7 +23,7 @@
       padding:14px;
     }
 
-    /* HEADER (matches your style) */
+    /* HEADER */
     .top-bar{
       background:#2a3246;
       border-radius:14px;
@@ -78,27 +78,64 @@
       cursor:pointer;
       white-space:nowrap;
     }
-    .tab[aria-selected="true"][data-target="sentence"]{ background:#3f61ff; }
-    .tab[aria-selected="true"][data-target="feeling"] { background:#c63d7a; }
-    .tab[aria-selected="true"][data-target="want"]    { background:#7c3aed; }
+    .tab[aria-selected="true"][data-target="sentence"] { background:#3f61ff; }
+    .tab[aria-selected="true"][data-target="feeling"]  { background:#c63d7a; }
+    .tab[aria-selected="true"][data-target="want"]     { background:#7c3aed; }
     .tab[aria-selected="true"][data-target="emergency"]{ background:#e2553f; }
-    .tab[aria-selected="true"][data-target="help"]    { background:#3a4252; }
+    .tab[aria-selected="true"][data-target="help"]     { background:#3a4252; }
 
     .tabs-bar .spacer{ flex:1; }
+
+    /* Sentence bar (only shown on Sentence building screen) */
+    .sentence-bar{
+      display:flex;
+      gap:10px;
+      margin: 6px 0 18px;
+      align-items:center;
+    }
+    .sentence-bar[hidden]{ display:none; }
+
+    .sentence-bar input{
+      flex:1;
+      padding:14px 14px;
+      border-radius:12px;
+      border:none;
+      font-size:18px;
+      outline:none;
+    }
+    .sentence-bar button{
+      width:48px;
+      height:48px;
+      border-radius:12px;
+      border:none;
+      background:#3a4252;
+      color:#fff;
+      font-size:18px;
+      cursor:pointer;
+    }
+
+    /* SECTION HEADERS */
+    h2{
+      margin: 18px 6px 10px;
+      font-size:16px;
+      opacity:.9;
+      font-weight:600;
+    }
 
     /* SCREENS */
     .screen[hidden]{ display:none; }
 
-    /* WANT GRID */
+    /* GRID */
     .grid{
       display:grid;
       grid-template-columns: repeat(5, 1fr);
       gap:14px;
-      padding-top:8px;
+      padding: 0 4px 10px;
     }
     @media (max-width: 740px){ .grid{ grid-template-columns: repeat(4, 1fr);} }
     @media (max-width: 560px){ .grid{ grid-template-columns: repeat(3, 1fr);} }
 
+    /* TILE */
     .tile{
       border:none;
       border-radius:14px;
@@ -116,15 +153,13 @@
       box-shadow:0 10px 20px rgba(0,0,0,.35);
     }
 
-    .tile.purple{ background:#7c3aed; }
-    .tile.grey{ background:#3a4252; }
-
     .tile img.icon{
       width: clamp(62px, 7vw, 92px);
       height: clamp(62px, 7vw, 92px);
       object-fit:contain;
       display:block;
-      /* makes dark SVG exports show as white (safe for most outline sets) */
+
+      /* Most outline SVG exports are black; this makes them appear white */
       filter: brightness(0) invert(1);
     }
 
@@ -135,16 +170,22 @@
       text-align:center;
     }
 
+    /* TILE COLORS */
+    .blue   { background:#3f61ff; }
+    .pink   { background:#c63d7a; }
+    .purple { background:#7c3aed; }
+    .green  { background:#3fb3a2; }
+    .orange { background:#d96b2b; }
+    .grey   { background:#3a4252; }
+
     /* EMERGENCY */
     .emergency-row{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:22px;
-      padding-top:40px;
+      padding: 28px 4px 10px;
     }
-    @media (max-width: 640px){
-      .emergency-row{ grid-template-columns: 1fr; }
-    }
+    @media (max-width: 640px){ .emergency-row{ grid-template-columns: 1fr; } }
 
     .em-card{
       border:none;
@@ -201,8 +242,8 @@
     }
     .em-mom .bar b{ font-weight:900; }
 
-    /* Accessibility */
-    button:focus-visible{
+    /* Focus */
+    button:focus-visible, input:focus-visible{
       outline:3px solid #fff;
       outline-offset:3px;
     }
@@ -220,42 +261,84 @@
     </header>
 
     <nav class="tabs-bar" role="tablist" aria-label="Primary navigation">
-      <button class="tab" role="tab" aria-selected="true" data-target="sentence" type="button">
-        Sentence building
-      </button>
-      <button class="tab" role="tab" aria-selected="false" data-target="feeling" type="button">
-        I am feeling
-      </button>
-      <button class="tab" role="tab" aria-selected="false" data-target="want" type="button">
-        I want
-      </button>
-      <button class="tab" role="tab" aria-selected="false" data-target="emergency" type="button">
-        Emergency
-      </button>
-
+      <button class="tab" role="tab" aria-selected="true" data-target="sentence" type="button">Sentence building</button>
+      <button class="tab" role="tab" aria-selected="false" data-target="feeling" type="button">I am feeling</button>
+      <button class="tab" role="tab" aria-selected="false" data-target="want" type="button">I want</button>
+      <button class="tab" role="tab" aria-selected="false" data-target="emergency" type="button">Emergency</button>
       <div class="spacer"></div>
-
-      <button class="tab" role="tab" aria-selected="false" data-target="help" type="button">
-        Help
-      </button>
+      <button class="tab" role="tab" aria-selected="false" data-target="help" type="button">Help</button>
     </nav>
 
+    <!-- Sentence bar (only appears on Sentence building screen) -->
+    <div class="sentence-bar" id="sentenceBar">
+      <input id="sentence" placeholder="I want to..." aria-label="Sentence output" />
+      <button type="button" id="speakBtn" aria-label="Speak sentence">🔊</button>
+      <button type="button" id="clearBtn" aria-label="Clear sentence">🗑</button>
+    </div>
+
     <main>
-      <!-- You can paste your Sentence-building screen here -->
+      <!-- ✅ SENTENCE BUILDING -->
       <section class="screen" data-screen="sentence">
-        <div style="opacity:.8; padding:10px 6px;">
-          Sentence building screen content goes here.
+        <h2>Subject</h2>
+        <div class="grid">
+          <button type="button" class="tile blue word" data-word="I"><span class="label">I</span></button>
+          <button type="button" class="tile blue word" data-word="You"><span class="label">You</span></button>
+          <button type="button" class="tile blue word" data-word="We"><span class="label">We</span></button>
+          <button type="button" class="tile blue word" data-word="They"><span class="label">They</span></button>
+          <button type="button" class="tile blue word" data-word="She"><span class="label">She</span></button>
+          <button type="button" class="tile grey"><span class="label">Add More</span></button>
+        </div>
+
+        <h2>Things</h2>
+        <div class="grid">
+          <button type="button" class="tile purple word" data-word="Want"><span class="label">Want</span></button>
+          <button type="button" class="tile purple word" data-word="Need"><span class="label">Need</span></button>
+          <button type="button" class="tile purple word" data-word="Like"><span class="label">Like</span></button>
+          <button type="button" class="tile purple word" data-word="Have"><span class="label">Have</span></button>
+          <button type="button" class="tile purple word" data-word="See"><span class="label">See</span></button>
+          <button type="button" class="tile purple word" data-word="Go"><span class="label">Go</span></button>
+          <button type="button" class="tile purple word" data-word="Eat"><span class="label">Eat</span></button>
+          <button type="button" class="tile purple word" data-word="Drink"><span class="label">Drink</span></button>
+          <button type="button" class="tile purple word" data-word="Play"><span class="label">Play</span></button>
+          <button type="button" class="tile grey"><span class="label">Add More</span></button>
+        </div>
+
+        <h2>Actions</h2>
+        <div class="grid">
+          <button type="button" class="tile green word" data-word="Water"><span class="label">Water</span></button>
+          <button type="button" class="tile green word" data-word="Food"><span class="label">Food</span></button>
+          <button type="button" class="tile green word" data-word="Help"><span class="label">Help</span></button>
+          <button type="button" class="tile green word" data-word="Break"><span class="label">Break</span></button>
+          <button type="button" class="tile green word" data-word="Bathroom"><span class="label">Bathroom</span></button>
+          <button type="button" class="tile green word" data-word="Sleep"><span class="label">Sleep</span></button>
+          <button type="button" class="tile green word" data-word="Music"><span class="label">Music</span></button>
+          <button type="button" class="tile green word" data-word="Stop"><span class="label">Stop</span></button>
+          <button type="button" class="tile grey"><span class="label">Add More</span></button>
+        </div>
+
+        <h2>Other Words</h2>
+        <div class="grid">
+          <button type="button" class="tile orange word" data-word="Now"><span class="label">Now</span></button>
+          <button type="button" class="tile orange word" data-word="Later"><span class="label">Later</span></button>
+          <button type="button" class="tile orange word" data-word="Yes"><span class="label">Yes</span></button>
+          <button type="button" class="tile grey"><span class="label">Add More</span></button>
         </div>
       </section>
 
-      <!-- You can paste your Feeling grid here -->
+      <!-- ✅ FEELING -->
       <section class="screen" data-screen="feeling" hidden>
-        <div style="opacity:.8; padding:10px 6px;">
-          Feeling screen content goes here.
+        <div class="grid">
+          <button type="button" class="tile pink feeling" data-feel="Sleepy"><span class="label">Sleepy</span></button>
+          <button type="button" class="tile pink feeling" data-feel="Happy"><span class="label">Happy</span></button>
+          <button type="button" class="tile pink feeling" data-feel="Sad"><span class="label">Sad</span></button>
+          <button type="button" class="tile pink feeling" data-feel="Mad"><span class="label">Mad</span></button>
+          <button type="button" class="tile pink feeling" data-feel="Surprised"><span class="label">Surprised</span></button>
+          <button type="button" class="tile pink feeling" data-feel="Confused"><span class="label">Confused</span></button>
+          <button type="button" class="tile grey"><span class="label">Add More</span></button>
         </div>
       </section>
 
-      <!-- WANT (matches your screenshot) -->
+      <!-- ✅ I WANT (your screenshot layout) -->
       <section class="screen" data-screen="want" hidden>
         <div class="grid">
           <button type="button" class="tile purple word" data-word="Bathroom"><span class="label">Bathroom</span></button>
@@ -274,13 +357,11 @@
           <button type="button" class="tile purple word" data-word="A hug"><span class="label">A hug</span></button>
           <button type="button" class="tile purple word" data-word="Music"><span class="label">Music</span></button>
 
-          <button type="button" class="tile grey add">
-            <span class="label">Add More</span>
-          </button>
+          <button type="button" class="tile grey"><span class="label">Add More</span></button>
         </div>
       </section>
 
-      <!-- EMERGENCY (matches your screenshot) -->
+      <!-- ✅ EMERGENCY (your screenshot layout) -->
       <section class="screen" data-screen="emergency" hidden>
         <div class="emergency-row">
           <button type="button" class="em-card em-911" aria-label="Call 911">
@@ -291,7 +372,7 @@
 
           <button type="button" class="em-card em-mom" aria-label="Call Mom">
             <div class="photo">
-              <!-- change this filename to whatever you actually have -->
+              <!-- use any photo name you have; this will hide if missing -->
               <img src="images/Call Mom.jpg" alt="Contact photo" onerror="this.style.display='none'" />
             </div>
             <div class="bar">Call <b>Mom</b></div>
@@ -299,42 +380,92 @@
         </div>
       </section>
 
+      <!-- ✅ HELP -->
       <section class="screen" data-screen="help" hidden>
-        <div style="opacity:.8; padding:10px 6px;">
-          Help screen content goes here.
+        <div style="opacity:.9; padding: 8px 6px;">
+          <h2>Help</h2>
+          <p style="margin:8px 0 0; opacity:.85;">
+            Tap a tile to build a message. Use 🔊 to speak. Use 🗑 to clear.
+          </p>
         </div>
       </section>
     </main>
   </div>
 
   <script>
-    // Tabs: show/hide screens
+    // ---- Tabs: show/hide screens ----
     const tabs = document.querySelectorAll(".tab");
     const screens = document.querySelectorAll(".screen");
+    const sentenceBar = document.getElementById("sentenceBar");
 
     function showScreen(name) {
       screens.forEach(s => s.hidden = (s.dataset.screen !== name));
       tabs.forEach(t => t.setAttribute("aria-selected", String(t.dataset.target === name)));
+
+      // Sentence bar only on Sentence screen (matches your screenshots)
+      sentenceBar.hidden = (name !== "sentence");
     }
+
     tabs.forEach(tab => tab.addEventListener("click", () => showScreen(tab.dataset.target)));
 
-    // Auto-load SVG icons for tiles based on their title (handles spaces!)
+    // ---- Sentence input + speech ----
+    const input = document.getElementById("sentence");
+
+    function addToSentence(text) {
+      input.value += (input.value ? " " : "") + text;
+    }
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      input.value = "";
+    });
+
+    document.getElementById("speakBtn").addEventListener("click", () => {
+      const text = input.value.trim();
+      if (!text) return;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+    });
+
+    // ---- Auto-load SVG icons for all .word tiles (handles spaces safely) ----
     document.querySelectorAll(".word").forEach((btn) => {
       const word = btn.dataset.word;
-
       const img = document.createElement("img");
       img.className = "icon";
 
-      // IMPORTANT: spaces/special chars need URL encoding for GitHub Pages
-      const safeName = encodeURIComponent(word);
-      img.src = `images/${safeName}.svg`;
-
+      // IMPORTANT: supports filenames like "To talk.svg" and "A hug.svg"
+      img.src = `images/${encodeURIComponent(word)}.svg`;
       img.alt = "";
-
       img.onerror = () => img.remove();
 
-      // Insert icon above label
       btn.prepend(img);
+
+      // Only Sentence building should add words (so Want can be just “action tiles” visually)
+      btn.addEventListener("click", () => {
+        // If you want Want tiles to also build a sentence, remove this if-check.
+        const currentScreen = [...screens].find(s => !s.hidden)?.dataset.screen;
+        if (currentScreen === "sentence") addToSentence(word);
+      });
+    });
+
+    // ---- Feeling icons + behavior ----
+    document.querySelectorAll(".feeling").forEach((btn) => {
+      const feeling = btn.dataset.feel;
+
+      // add SVG icon using the SAME title rule
+      const img = document.createElement("img");
+      img.className = "icon";
+      img.src = `images/${encodeURIComponent(feeling)}.svg`;
+      img.alt = "";
+      img.onerror = () => img.remove();
+      btn.prepend(img);
+
+      // clicking a feeling sets a phrase (refined prototype behavior)
+      btn.addEventListener("click", () => {
+        input.value = `I am feeling ${feeling}`;
+        // optional: speak immediately (comment out if you don’t want auto-speak)
+        // window.speechSynthesis.cancel();
+        // window.speechSynthesis.speak(new SpeechSynthesisUtterance(input.value));
+      });
     });
   </script>
 </body>
