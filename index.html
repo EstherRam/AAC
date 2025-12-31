@@ -2,302 +2,345 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-
-  <!-- Viewport meta tag (MDN) -->
-  <!-- Source: https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>OpenVoice – AAC Prototype</title>
+  <title>OpenVoice – Refined Prototype</title>
 
   <style>
-    /* Start of code from MDN CSS box-sizing
-       Source: https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
-    * {
-      box-sizing: border-box;
-      font-family: system-ui, sans-serif;
-    }
-    /* End of code from MDN CSS box-sizing */
+    * { box-sizing: border-box; font-family: system-ui, sans-serif; }
 
     body {
       margin: 0;
       background: #121827;
-      color: #ffffff;
+      color: #fff;
       display: flex;
       justify-content: center;
     }
 
-    /* App container sized to iPad Pro 11" portrait (834px wide) */
     .app {
       width: 100%;
-      max-width: 834px;
+      max-width: 834px; /* iPad Pro 11" portrait */
       min-height: 100vh;
       padding: 16px;
     }
 
-    /* ---------- HEADER ---------- */
+    /* HEADER */
     .top-bar {
-      background: #1b2332;
-      padding: 16px;
+      background: #2a3246;
+      padding: 18px 16px;
       text-align: center;
-      border-radius: 12px;
-      margin-bottom: 16px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      position: relative;
     }
-
     .top-bar h1 {
       margin: 0;
-      font-size: 20px;
+      font-size: 44px;
+      letter-spacing: .5px;
+      font-weight: 700;
     }
 
-    /* ---------- TABS ---------- */
+    /* TABS BAR */
     .tabs {
       display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .tabs button {
-      flex: 1;
+      gap: 10px;
+      background: #8a93a7;
       padding: 10px;
-      border-radius: 8px;
-      border: none;
-      background: #4b556b;
-      color: white;
-      font-size: 12px;
-      cursor: pointer;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      align-items: center;
     }
 
-    .tabs button.active {
-      background: #3f61ff;
-    }
-
-    /* ---------- SENTENCE BAR ---------- */
-    .sentence-bar {
+    .tab {
       display: flex;
+      align-items: center;
       gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .sentence-bar input {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
-
-    .sentence-bar button {
-      padding: 12px;
-      border-radius: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
       border: none;
       background: #3a4252;
       color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    /* ---------- SECTIONS ---------- */
-    h2 {
       font-size: 14px;
-      opacity: 0.85;
-      margin: 16px 0 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex: 0 0 auto;
     }
 
-    /* Start of code from MDN CSS Grid Layout
-       Source: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout */
+    .tab .tab-ico {
+      width: 18px;
+      height: 18px;
+      filter: brightness(0) invert(1);
+      opacity: .95;
+    }
+
+    .tabs .spacer { flex: 1; }
+
+    /* Active tab colors (match screenshots) */
+    .tab[aria-selected="true"][data-target="sentence"] { background: #3f61ff; }
+    .tab[aria-selected="true"][data-target="feeling"]  { background: #c63d7a; }
+    .tab[aria-selected="true"][data-target="want"]     { background: #7c3aed; }
+    .tab[aria-selected="true"][data-target="emergency"]{ background: #e2553f; }
+    .tab[aria-selected="true"][data-target="help"]     { background: #3a4252; }
+
+    /* SCREENS */
+    .screen[hidden] { display: none; }
+
+    /* GRID TILES (general) */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    /* End of code from MDN CSS Grid Layout */
-
-    /* ---------- BUTTONS ---------- */
-    /* Fallback background so buttons never disappear */
-    button {
-      background: #3a4252;
-      color: white;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
     }
 
-    /* Start of code from MDN clamp()
-       Source: https://developer.mozilla.org/en-US/docs/Web/CSS/clamp */
+    @media (max-width: 740px) {
+      .grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
     .tile {
-      padding: clamp(16px, 4vw, 2px);
-      border-radius: 14px;
       border: none;
-      font-size: clamp(14px, 2.5vw, 18px);
+      border-radius: 14px;
+      padding: 18px 14px;
+      color: #fff;
       cursor: pointer;
 
-      /* Icon + label layout */
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      gap: 12px;
-      text-align: center;
-    }
-    /* End of code from MDN clamp() */
+      align-items: center;
+      gap: 10px;
 
-    /* SVG icon sizing (bigger + responsive) */
-    .tile img.icon {
-      width: clamp(84px, 28vw, 116px);
-      height: clamp(84px, 28vw, 116px);
+      box-shadow: 0 10px 20px rgba(0,0,0,.35);
+      min-height: 120px;
+    }
+
+    .tile .icon {
+      width: clamp(56px, 7vw, 86px);
+      height: clamp(56px, 7vw, 86px);
       object-fit: contain;
       display: block;
-
-      /* Makes black SVG exports appear white (common for outline icons) */
       filter: brightness(0) invert(1);
     }
 
-    .tile span {
+    .tile .label {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    /* TILE COLORS */
+    .purple { background: #7c3aed; }
+    .grey   { background: #3a4252; }
+    .red    { background: #e2553f; }
+
+    /* “Add More” tile */
+    .tile.add .label { font-size: 20px; }
+    .tile.add .icon  { width: 70px; height: 70px; opacity: .95; }
+
+    /* EMERGENCY LAYOUT */
+    .emergency-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      padding-top: 30px;
+    }
+
+    @media (max-width: 640px) {
+      .emergency-row { grid-template-columns: 1fr; }
+    }
+
+    .em-card {
+      border: none;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 18px 28px rgba(0,0,0,.35);
+      cursor: pointer;
+      background: #e2553f;
+      min-height: 320px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    /* 911 card */
+    .em-card.big-icon {
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      gap: 12px;
+    }
+    .em-card.big-icon img {
+      width: 110px;
+      height: 110px;
+      filter: brightness(0) invert(1);
+    }
+    .em-card.big-icon .num {
+      font-size: 84px;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+    }
+
+    /* Call Mom card */
+    .em-card.photo {
+      background: #111827;
+    }
+    .em-card.photo .photo-area {
+      flex: 1;
+      background: #111827;
+    }
+    .em-card.photo .photo-area img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
-      line-height: 1.1;
     }
-
-    /* ---------- COLORS ---------- */
-    .tile.blue { background: #3f61ff; }
-    .tile.purple { background: #7c3aed; }
-    .tile.green { background: #3fb3a2; }
-    .tile.orange { background: #d96b2b; }
-    .tile.grey { background: #3a4252; }
-
-    /* ---------- ACCESSIBILITY ---------- */
-    /* Source: https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible */
-    button:focus-visible,
-    input:focus-visible {
-      outline: 3px solid white;
-      outline-offset: 2px;
+    .em-card.photo .label-area {
+      background: #e2553f;
+      padding: 22px 18px;
+      font-size: 46px;
+      font-weight: 600;
+      text-align: center;
     }
+    .em-card.photo .label-area span { font-weight: 800; }
 
-    /* ---------- RESPONSIVE TABS ---------- */
-    @media (max-width: 480px) {
-      .tabs button {
-        font-size: 10px;
-        padding: 8px;
-      }
+    /* Focus */
+    button:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 3px;
     }
   </style>
 </head>
 
 <body>
   <div class="app">
-
-    <!-- HEADER -->
-    <div class="top-bar">
+    <header class="top-bar">
       <h1>OpenVoice</h1>
-    </div>
+    </header>
 
-    <!-- TABS (visual only for now) -->
-    <div class="tabs" aria-label="Navigation tabs">
-      <button type="button" class="active">Sentence</button>
-      <button type="button">Feeling</button>
-      <button type="button">Want</button>
-      <button type="button">Emergency</button>
-      <button type="button">Help</button>
-    </div>
+    <!-- Tabs -->
+    <nav class="tabs" role="tablist" aria-label="Primary navigation">
+      <button class="tab" role="tab" aria-selected="true" data-target="sentence" type="button">
+        <img class="tab-ico" src="images/Sentence.svg" alt="" />
+        Sentence building
+      </button>
 
-    <!-- SENTENCE BUILDER -->
-    <div class="sentence-bar">
-      <input id="sentence" placeholder="I want to…" aria-label="Sentence output" />
-      <button type="button" id="speakBtn" aria-label="Speak sentence">🔊</button>
-      <button type="button" id="clearBtn" aria-label="Clear sentence">🗑</button>
-    </div>
+      <button class="tab" role="tab" aria-selected="false" data-target="feeling" type="button">
+        <img class="tab-ico" src="images/Feeling.svg" alt="" />
+        I am feeling
+      </button>
 
-    <!-- SUBJECT -->
-    <h2>Subject</h2>
-    <div class="grid">
-      <button type="button" class="tile blue word" data-word="I"><span>I</span></button>
-      <button type="button" class="tile blue word" data-word="You"><span>You</span></button>
-      <button type="button" class="tile blue word" data-word="We"><span>We</span></button>
-      <button type="button" class="tile blue word" data-word="They"><span>They</span></button>
-      <button type="button" class="tile blue word" data-word="She"><span>She</span></button>
-      <button type="button" class="tile grey"><span>＋ Add</span></button>
-    </div>
+      <button class="tab" role="tab" aria-selected="false" data-target="want" type="button">
+        <img class="tab-ico" src="images/Want.svg" alt="" />
+        I want
+      </button>
 
-    <!-- THINGS -->
-    <h2>Things</h2>
-    <div class="grid">
-      <button type="button" class="tile purple word" data-word="Want"><span>Want</span></button>
-      <button type="button" class="tile purple word" data-word="Need"><span>Need</span></button>
-      <button type="button" class="tile purple word" data-word="Like"><span>Like</span></button>
-      <button type="button" class="tile purple word" data-word="Have"><span>Have</span></button>
-      <button type="button" class="tile purple word" data-word="See"><span>See</span></button>
-      <button type="button" class="tile purple word" data-word="Go"><span>Go</span></button>
-      <button type="button" class="tile purple word" data-word="Eat"><span>Eat</span></button>
-      <button type="button" class="tile purple word" data-word="Drink"><span>Drink</span></button>
-      <button type="button" class="tile purple word" data-word="Play"><span>Play</span></button>
-      <button type="button" class="tile grey"><span>＋ Add</span></button>
-    </div>
+      <button class="tab" role="tab" aria-selected="false" data-target="emergency" type="button">
+        <img class="tab-ico" src="images/Emergency.svg" alt="" />
+        Emergency
+      </button>
 
-    <!-- ACTIONS -->
-    <h2>Actions</h2>
-    <div class="grid">
-      <button type="button" class="tile green word" data-word="Water"><span>Water</span></button>
-      <button type="button" class="tile green word" data-word="Food"><span>Food</span></button>
-      <button type="button" class="tile green word" data-word="Help"><span>Help</span></button>
-      <button type="button" class="tile green word" data-word="Break"><span>Break</span></button>
-      <button type="button" class="tile green word" data-word="Bathroom"><span>Bathroom</span></button>
-      <button type="button" class="tile green word" data-word="Sleep"><span>Sleep</span></button>
-      <button type="button" class="tile green word" data-word="Music"><span>Music</span></button>
-      <button type="button" class="tile green word" data-word="Stop"><span>Stop</span></button>
-      <button type="button" class="tile grey"><span>＋ Add</span></button>
-    </div>
+      <div class="spacer"></div>
 
-    <!-- OTHER WORDS -->
-    <h2>Other Words</h2>
-    <div class="grid">
-      <button type="button" class="tile orange word" data-word="Now"><span>Now</span></button>
-      <button type="button" class="tile orange word" data-word="Later"><span>Later</span></button>
-      <button type="button" class="tile orange word" data-word="Yes"><span>Yes</span></button>
-      <button type="button" class="tile grey"><span>＋ Add</span></button>
-    </div>
+      <button class="tab" role="tab" aria-selected="false" data-target="help" type="button">
+        <img class="tab-ico" src="images/HelpTab.svg" alt="" />
+        Help
+      </button>
+    </nav>
 
+    <main>
+      <!-- SCREEN: Sentence building (placeholder – keep your sentence builder here) -->
+      <section class="screen" data-screen="sentence">
+        <p style="opacity:.8; margin: 18px 6px;">Sentence building screen (keep your sentence bar + grids here).</p>
+      </section>
+
+      <!-- SCREEN: Feeling (placeholder) -->
+      <section class="screen" data-screen="feeling" hidden>
+        <p style="opacity:.8; margin: 18px 6px;">Feeling screen (you can paste your pink tiles here).</p>
+      </section>
+
+      <!-- SCREEN: I want (matches your screenshot layout) -->
+      <section class="screen" data-screen="want" hidden>
+        <div class="grid">
+          <button type="button" class="tile purple word" data-word="Bathroom"><span class="label">Bathroom</span></button>
+          <button type="button" class="tile purple word" data-word="Help"><span class="label">Help</span></button>
+          <button type="button" class="tile purple word" data-word="Water"><span class="label">Water</span></button>
+          <button type="button" class="tile purple word" data-word="Food"><span class="label">Food</span></button>
+          <button type="button" class="tile purple word" data-word="Break"><span class="label">Break</span></button>
+
+          <button type="button" class="tile purple word" data-word="To talk"><span class="label">To talk</span></button>
+          <button type="button" class="tile purple word" data-word="To run"><span class="label">To run</span></button>
+          <button type="button" class="tile purple word" data-word="Play"><span class="label">Play</span></button>
+          <button type="button" class="tile purple word" data-word="To read"><span class="label">To read</span></button>
+          <button type="button" class="tile purple word" data-word="TV"><span class="label">TV</span></button>
+
+          <button type="button" class="tile purple word" data-word="Quiet"><span class="label">Quiet</span></button>
+          <button type="button" class="tile purple word" data-word="A hug"><span class="label">A hug</span></button>
+          <button type="button" class="tile purple word" data-word="Music"><span class="label">Music</span></button>
+
+          <button type="button" class="tile grey add">
+            <img class="icon" src="images/Plus.svg" alt="" />
+            <span class="label">Add More</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- SCREEN: Emergency (matches your screenshot layout) -->
+      <section class="screen" data-screen="emergency" hidden>
+        <div class="emergency-row">
+          <!-- 911 -->
+          <button type="button" class="em-card big-icon" aria-label="Call 911">
+            <!-- If your 911 icon svg is named differently, change this -->
+            <img src="images/911.svg" alt="" />
+            <div class="num">911</div>
+          </button>
+
+          <!-- Call Mom -->
+          <button type="button" class="em-card photo" aria-label="Call Mom">
+            <div class="photo-area">
+              <!-- Put an image named mom.jpg in /images or change the filename here -->
+              <img src="images/mom.jpg" alt="Contact photo" />
+            </div>
+            <div class="label-area">Call <span>Mom</span></div>
+          </button>
+        </div>
+      </section>
+
+      <!-- SCREEN: Help (placeholder) -->
+      <section class="screen" data-screen="help" hidden>
+        <p style="opacity:.8; margin: 18px 6px;">Help screen content goes here.</p>
+      </section>
+    </main>
   </div>
 
-  <!-- Start of code from MDN Web Speech API
-       Source: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API -->
   <script>
-    const input = document.getElementById("sentence");
+    // Tabs: show/hide screens
+    const tabs = document.querySelectorAll(".tab");
+    const screens = document.querySelectorAll(".screen");
 
-    // Add icons + click behavior for each word button
+    function showScreen(name) {
+      screens.forEach(s => s.hidden = (s.dataset.screen !== name));
+      tabs.forEach(t => t.setAttribute("aria-selected", String(t.dataset.target === name)));
+    }
+
+    tabs.forEach(tab => tab.addEventListener("click", () => showScreen(tab.dataset.target)));
+
+    // Auto-load SVG icons for "word" tiles (expects images/<word>.svg)
     document.querySelectorAll(".word").forEach((btn) => {
       const word = btn.dataset.word;
 
-      // Create icon element (SVG files now)
       const img = document.createElement("img");
       img.className = "icon";
       img.src = `images/${word}.svg`;
-      img.alt = `${word} icon`;
+      img.alt = "";
 
-      // If icon missing, remove it (button still works)
       img.onerror = () => img.remove();
 
-      // Place icon above the label
+      // Insert icon at top of tile (before label)
       btn.prepend(img);
-
-      // Click adds the word to the sentence bar
-      btn.addEventListener("click", () => {
-        input.value += (input.value ? " " : "") + word;
-      });
-    });
-
-    // Clear sentence
-    document.getElementById("clearBtn").addEventListener("click", () => {
-      input.value = "";
-    });
-
-    // Speak sentence
-    document.getElementById("speakBtn").addEventListener("click", () => {
-      const text = input.value.trim();
-      if (!text) return;
-
-      // Prevent overlapping speech
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      window.speechSynthesis.speak(utterance);
     });
   </script>
-  <!-- End of code from MDN Web Speech API -->
 </body>
 </html>
